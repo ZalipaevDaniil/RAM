@@ -113,6 +113,7 @@ private extension DetailsViewController {
             infoTableView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 18),
             infoTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             infoTableView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            infoTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
             
         ])
     }
