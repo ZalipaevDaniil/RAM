@@ -8,8 +8,7 @@
 import UIKit
 
 final class EpisodesCell: UICollectionViewCell {
-    
-    
+
     //MARK: Static Properties
     static let reuseID = "EpisodesCell"
     

@@ -16,6 +16,7 @@ final class FavoritesCollectionViewController: UICollectionViewController {
         didSet {
             viewModel.getAllCharacters(from: baseURL) { [ weak self] in
                 self?.viewModel.filterFavoritesCharacters()
+                print("Favorites(viewModel) in  FavCVC: \(String(describing: self?.viewModel.filterFavoritesCharacters()))")
                 self?.collectionView.reloadData()
             }
         }

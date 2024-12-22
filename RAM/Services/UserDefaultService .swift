@@ -22,7 +22,10 @@ final class UserDefaultsService: UserDefaultsServiceProtocol {
     }
     
     func setFavoritesStatus(forKey: Int, witch status: Bool) {
-        userDefaults.set(status, forKey: String(forKey))
+        let key = String(forKey)
+        print("Saving status: \(status) for key \(key)")
+        userDefaults.set(status, forKey: key)
+        
     }
     
 }

@@ -29,6 +29,7 @@ final class DetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupUI()
     }
     
 }
@@ -36,16 +37,21 @@ final class DetailsViewController: UIViewController {
 //MARK: UI
 private extension DetailsViewController {
     func setupUI() {
+        view.backgroundColor = .backGround
+        setupCharacterImage()
+        setupCameraButton()
+        setupNameCharacter()
+        setupInfoTableView()
         
     }
     
     func setupCharacterImage() {
-        view.addSubview(cameraButton)
+        view.addSubview(characterImage)
         characterImage.translatesAutoresizingMaskIntoConstraints = false
         characterImage.contentMode = .scaleAspectFit
         characterImage.clipsToBounds = true
         
-        characterImage.layer.cornerRadius = 150
+        characterImage.layer.cornerRadius = 75
         characterImage.layer.borderColor = UIColor(named: "borderColor")?.cgColor
         characterImage.layer.borderWidth = 4
         setupCharacterImageConstraint()

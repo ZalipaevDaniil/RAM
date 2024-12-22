@@ -91,12 +91,15 @@ final class EpisodeViewModel {
         }
     }
     
-    
     func filterFavoritesCharacters() {
+        print("All characters count: \(allCharacters.count)")
+        allCharacters.forEach { print("Character ID: \($0.id)")}
         favoritesCharacters = allCharacters.filter{
-            userDefaultService.getFavoriteStatus(forKey: $0.id)
+            let isFavorite = userDefaultService.getFavoriteStatus(forKey: $0.id)
+            print("Character ID: \($0.id), isFavorite: \(isFavorite)")
+            return isFavorite
         }
-        print("favoritesCharacters: \(favoritesCharacters)")
+        print("favoritesCharacters: \(favoritesCharacters.count)")
     }
     
     //MARK: Private Methods
