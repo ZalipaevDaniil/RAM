@@ -28,8 +28,13 @@ final class DetailsViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupNavigationBar()
         setupUI()
+    }
+    
+    //MARK: Private objc-c Methods
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
     
 }
@@ -42,6 +47,22 @@ private extension DetailsViewController {
         setupCameraButton()
         setupNameCharacter()
         setupInfoTableView()
+    }
+    
+    func setupNavigationBar() {
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+        let backButton = UIButton(type: .system)
+        backButton.setImage(UIImage(named: "goback"), for: .normal)
+        backButton.setAttributedTitle(NSAttributedString(string: "GO BACK",
+                                                         attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18, weight: .semibold)]), for: .normal)
+        backButton.addTarget(self, action: #selector(backButtonTapped), for:.touchUpInside )
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+        
+        let rightImage = UIImageView(image: UIImage(named: "characterTitleImage"))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightImage)
+        
+        navigationController?.navigationBar.tintColor = UIColor(named: "navTintColor")
         
     }
     
@@ -120,3 +141,9 @@ private extension DetailsViewController {
     
 }
 
+//MARK: Gesture Recognizer Delegate
+extension DetailsViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        true
+    }
+}
