@@ -96,7 +96,6 @@ final class TabBarCoordinator: NSObject, TabBarCoordinatorProtocol {
             let favCVC = dependencies.moduleContainer.getFavoritesCollectionViewController()
             favCVC.detailsControllerDelegate = self
             favCVC.tabBarItem = UITabBarItem(title: nil, image: page.pageImageValue(), tag: page.pageOrderNumber())
-            self.favoritesNavigationController = UINavigationController(rootViewController: favCVC)
             let navigationController = FavoritesNavigationController(rootViewController: favCVC)
             
             return navigationController
