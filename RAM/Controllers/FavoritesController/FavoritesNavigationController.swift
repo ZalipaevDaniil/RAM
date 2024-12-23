@@ -19,5 +19,4 @@ final class FavoritesNavigationController: UINavigationController {
         navigationBar.barTintColor = .white
         navigationBar.isTranslucent = false
     }
-
 }

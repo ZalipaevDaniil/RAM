@@ -162,15 +162,7 @@ private extension EpisodesCell {
         isFavoritesButton.setImage(UIImage(named: "likeImage"), for: .normal)
         isFavoritesButton.tintColor = UIColor(named: "IsLikesButtonColor")
         isFavoritesButton.addTarget(self, action: #selector(ButtonTapped), for: .touchUpInside)
-
-        if let imageView = isFavoritesButton.imageView {
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                imageView.widthAnchor.constraint(equalToConstant: 34),
-                imageView.heightAnchor.constraint(equalToConstant: 30)
-            ])
-        }
-        
+      
         bottomView.addSubview(isFavoritesButton)
 
     }
@@ -222,9 +214,9 @@ private extension EpisodesCell {
         //IsFavoritesButton
         NSLayoutConstraint.activate([
             isFavoritesButton.centerYAnchor.constraint(equalTo: bottomView.centerYAnchor),
-            isFavoritesButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -15),
-            isFavoritesButton.widthAnchor.constraint(equalToConstant: 50),
-            isFavoritesButton.heightAnchor.constraint(equalToConstant: 50)
+            isFavoritesButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -20),
+            isFavoritesButton.widthAnchor.constraint(equalToConstant: 36),
+            isFavoritesButton.heightAnchor.constraint(equalToConstant: 30)
             
         ])
 

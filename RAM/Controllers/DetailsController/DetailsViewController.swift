@@ -31,6 +31,9 @@ final class DetailsViewController: UIViewController {
         setupNavigationBar()
         setupUI()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
     
     //MARK: Private objc-c Methods
     @objc private func backButtonTapped() {
@@ -53,13 +56,20 @@ private extension DetailsViewController {
         navigationController?.interactivePopGestureRecognizer?.delegate = self
         let backButton = UIButton(type: .system)
         backButton.setImage(UIImage(named: "goback"), for: .normal)
-        backButton.setAttributedTitle(NSAttributedString(string: "GO BACK",
+        backButton.setAttributedTitle(NSAttributedString(string: " GO BACK ",
                                                          attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18, weight: .semibold)]), for: .normal)
+        //costomize content inside in button
+        backButton.imageView?.contentMode = .scaleAspectFit
+        backButton.tintColor = .black
+        backButton.contentHorizontalAlignment = .leading
+        
         backButton.addTarget(self, action: #selector(backButtonTapped), for:.touchUpInside )
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
         
         let rightImage = UIImageView(image: UIImage(named: "characterTitleImage"))
+        rightImage.contentMode = .scaleAspectFit
+        rightImage.clipsToBounds = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightImage)
         
         navigationController?.navigationBar.tintColor = UIColor(named: "navTintColor")
@@ -118,7 +128,10 @@ private extension DetailsViewController {
     func setupCameraButtonConstraint() {
         NSLayoutConstraint.activate([
             cameraButton.centerYAnchor.constraint(equalTo: characterImage.centerYAnchor),
-            cameraButton.leadingAnchor.constraint(equalTo: characterImage.trailingAnchor, constant: 10)
+            cameraButton.leadingAnchor.constraint(equalTo: characterImage.trailingAnchor, constant: 8),
+            cameraButton.widthAnchor.constraint(equalToConstant: 24),
+            cameraButton.heightAnchor.constraint(equalToConstant: 21)
+            
         ])
     }
     

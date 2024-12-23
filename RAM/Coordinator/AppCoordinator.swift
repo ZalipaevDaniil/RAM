@@ -26,7 +26,6 @@ final class AppCoordinator: AppCoordinatorProtocol {
     
     init(_ navigationController: UINavigationController, _ dependencies: Dependencies) {
         self.navigationController = navigationController
-        navigationController.setNavigationBarHidden(true, animated: true)
         self.dependencies = dependencies
     }
     
