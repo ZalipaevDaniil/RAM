@@ -38,9 +38,10 @@ final class FavoritesCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshFavorites), name: .favoritesDidUpdate, object: nil)
-        
+        collectionView.delegate = self
         setupCollectionView()
-        navigationItem.title = "Favorites episodes"
+        setupNavigationTitle()
+        
         collectionView.backgroundView = UIView()
         collectionView.backgroundView?.backgroundColor = .backGround
         eventPublisher.send(.episodesComplete)
@@ -89,6 +90,7 @@ extension FavoritesCollectionViewController {
         return cell
     }
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("cell pressed \(indexPath.row)")
         if let character = viewModel?.favoritesCharacters[indexPath.row] {
             detailsControllerDelegate?.didTappedOnFavoritesCharacter(character, viewModel.dependencies)
         }
@@ -118,6 +120,17 @@ private extension FavoritesCollectionViewController {
     func setupCollectionView() {
         collectionView.backgroundColor = .white
         collectionView.register(EpisodesCell.self, forCellWithReuseIdentifier: EpisodesCell.reuseID)
+    }
+    
+    func setupNavigationTitle() {
+        let titleLable = UILabel()
+        titleLable.text = "Favourites episodes"
+        titleLable.font = .systemFont(ofSize: 24, weight: .bold)
+        titleLable.textColor = .black
+        titleLable.textAlignment = .center
+        titleLable.translatesAutoresizingMaskIntoConstraints = false
+       
+        navigationItem.titleView? = titleLable
     }
 }
 

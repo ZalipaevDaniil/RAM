@@ -56,6 +56,7 @@ extension ModuleContainer {
         let viewModel = EpisodeViewModel(dependencies: dependencies)
         let favCVC = FavoritesCollectionViewController(viewModel: viewModel, collectionViewLayout: flowLayout)
         favCVC.viewModel = viewModel
+        
         return favCVC
     }
 }

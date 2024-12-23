@@ -96,6 +96,7 @@ final class TabBarCoordinator: NSObject, TabBarCoordinatorProtocol {
             let favCVC = dependencies.moduleContainer.getFavoritesCollectionViewController()
             favCVC.detailsControllerDelegate = self
             favCVC.tabBarItem = UITabBarItem(title: nil, image: page.pageImageValue(), tag: page.pageOrderNumber())
+            self.favoritesNavigationController = UINavigationController(rootViewController: favCVC)
             let navigationController = FavoritesNavigationController(rootViewController: favCVC)
             
             return navigationController
@@ -123,7 +124,10 @@ extension TabBarCoordinator : DetailViewControllerDelegate {
     }
     
     func didTappedOnFavoritesCharacter(_ character: CharacterResponse, _ dependencies: Dependencies) {
-        guard let favoritesNavController = self.favoritesNavigationController else { return }
+        print("Navigation starts for the character \(character)")
+        guard let favoritesNavController = self.favoritesNavigationController else {
+            print(" favoritesNAVController equality nil")
+            return }
         let detailVC = DetailsAssambley.configure(character, dependencies)
         favoritesNavController.show(detailVC, sender: self)
     }
