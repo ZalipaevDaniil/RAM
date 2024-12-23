@@ -81,9 +81,7 @@ final class TabBarCoordinator: NSObject, TabBarCoordinatorProtocol {
     
     //Controller coordination
     private func getTabController(_ page: TabBarPage) -> UINavigationController {
-        
-        
-        
+
         switch page {
             ///При необходимости: каждый поток панели вкладок может иметь своего собственного координатора.
         case .episodes:
@@ -97,7 +95,7 @@ final class TabBarCoordinator: NSObject, TabBarCoordinatorProtocol {
             favCVC.detailsControllerDelegate = self
             favCVC.tabBarItem = UITabBarItem(title: nil, image: page.pageImageValue(), tag: page.pageOrderNumber())
             let navigationController = FavoritesNavigationController(rootViewController: favCVC)
-            
+            self.favoritesNavigationController = navigationController
             return navigationController
         }
     }
