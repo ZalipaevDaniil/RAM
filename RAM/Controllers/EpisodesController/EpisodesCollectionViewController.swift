@@ -52,6 +52,7 @@ class EpisodesCollectionViewController: UICollectionViewController {
     //MARK: Private Properties
     private var isShowMoreEpisode: Bool = false
     private let logoImageView = UIImageView(image: UIImage(named: "MainImageLaunch"))
+    private let customImageView = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 35))
     //CombineSubscription
     private var cancellables = Set<AnyCancellable>()
     
@@ -76,30 +77,6 @@ class EpisodesCollectionViewController: UICollectionViewController {
     
 }
 
-
-//MARK: - Private methods
-private extension EpisodesCollectionViewController {
-    func setUpCollectionView() {
-
-        
-        
-        collectionView.backgroundView = UIView()
-        collectionView.backgroundView?.backgroundColor = UIColor(named: "backgroundColor")
-        
-        collectionView.backgroundColor = .white
-        
-        
-        collectionView.register(EpisodesCell.self, forCellWithReuseIdentifier: EpisodesCell.reuseID)
-        
-        collectionView.register(TopSectionCollectionViewCell.self, forCellWithReuseIdentifier: TopSectionCollectionViewCell.reuseID)
-        
-        collectionView.register(FooterLoadingCollectionResableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterLoadingCollectionResableView.reuseID)
-        
-    }
-
-    
-    
-}
 //MARK: - Collection View Data Source
 extension EpisodesCollectionViewController {
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -199,9 +176,10 @@ extension EpisodesCollectionViewController {
         return section == 1 ? CGSize(width: collectionView.bounds.width, height: 50) : .zero
     }
 }
-//MARK: Scroll View
+//MARK: Scroll View Delegate
 extension EpisodesCollectionViewController {
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        getTitleLogoImageWhenScrolling(scrollView)
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         let height = scrollView.frame.size.height
@@ -238,3 +216,45 @@ extension EpisodesCollectionViewController: TopSectionCollectionViewControllerDe
     }
 }
 
+//MARK: - Private methods
+private extension EpisodesCollectionViewController {
+    func setUpCollectionView() {
+        setupLogoImageView()
+        
+        
+        collectionView.backgroundView = UIView()
+        collectionView.backgroundView?.backgroundColor = UIColor(named: "backgroundColor")
+        
+        collectionView.backgroundColor = .white
+        
+        
+        collectionView.register(EpisodesCell.self, forCellWithReuseIdentifier: EpisodesCell.reuseID)
+        
+        collectionView.register(TopSectionCollectionViewCell.self, forCellWithReuseIdentifier: TopSectionCollectionViewCell.reuseID)
+        
+        collectionView.register(FooterLoadingCollectionResableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterLoadingCollectionResableView.reuseID)
+        
+    }
+
+    func setupLogoImageView() {
+        logoImageView.frame = CGRect(x: 0, y: 0, width: 80, height: 35)
+        logoImageView.contentMode = .scaleAspectFit
+        
+        customImageView.addSubview(logoImageView)
+        
+        navigationItem.titleView = customImageView
+    }
+    
+    func getTitleLogoImageWhenScrolling(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y >= 2 {
+            UIView.animate(withDuration: 0.3) {
+                self.logoImageView.layer.opacity = 1
+            }
+        } else {
+            UIView.animate(withDuration: 0.2) {
+                self.logoImageView.layer.opacity = 0
+            }
+        }
+    }
+    
+}

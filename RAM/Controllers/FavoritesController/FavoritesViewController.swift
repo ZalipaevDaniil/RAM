@@ -32,15 +32,17 @@ final class FavoritesCollectionViewController: UICollectionViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         viewModel.filterFavoritesCharacters()
+        
         collectionView.reloadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshFavorites), name: .favoritesDidUpdate, object: nil)
-        collectionView.delegate = self
-        setupCollectionView()
+        navigationItem.title = "Favourites Episode"
         setupNavigationTitle()
+        setupCollectionView()
+        
         
         collectionView.backgroundView = UIView()
         collectionView.backgroundView?.backgroundColor = .backGround
