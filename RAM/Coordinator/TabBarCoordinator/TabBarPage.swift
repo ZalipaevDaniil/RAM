@@ -20,7 +20,6 @@ enum TabBarPage {
         }
     }
     
-    
     func pageOrderNumber() -> Int {
         switch self {
         case .episodes:

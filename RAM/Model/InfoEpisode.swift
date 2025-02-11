@@ -14,16 +14,19 @@ struct InfoEpisode: Codable, Equatable {
     let prev: String?
 }
 
-struct Episode: Codable, Equatable {
+struct EpisodeResult: Codable, Equatable {
     var id: Int
     let name: String
+    let air_date: String
     let numberEpisode: String
-    
+    let characters: [String]
+    let url : String
+    let created : String
     private enum CodingKeys: String, CodingKey {
-        case id, name
+        case id, name, air_date, characters, url, created
         case numberEpisode = "episode"
     }
-    static func == (lhs: Episode, rhs: CharacterResponse) -> Bool {
+    static func == (lhs: EpisodeResult, rhs: CharacterResult) -> Bool {
         return lhs.id == rhs.id
     }
     

@@ -24,7 +24,6 @@ final class TabBarCoordinator: NSObject, TabBarCoordinatorProtocol {
     
     var navigationController: UINavigationController
     var tabBarController: UITabBarController?
-    var favoritesNavigationController: FavoritesNavigationController?
     var childCoordinators: [any Coordinator] = []
     var dependencies: Dependencies
     var type: CoordinatorType { .tab }
@@ -37,13 +36,15 @@ final class TabBarCoordinator: NSObject, TabBarCoordinatorProtocol {
     
     func start() {
         guard let tabBarController = tabBarController else {return}
-        navigationController.setViewControllers([tabBarController], animated: true)
-       
         let pages: [TabBarPage] = [ .episodes, .favorites ]
             .sorted(by: {$0.pageOrderNumber() < $1.pageOrderNumber()})
-        let controllers : [UINavigationController] = pages.map({getTabController($0)})
         
+        let controllers : [UIViewController] = pages.map({getTabController($0)})
         prepareTabBArController(withTabControllers: controllers)
+        tabBarController.viewControllers = controllers
+        tabBarController.navigationItem.hidesBackButton = true
+        navigationController.setViewControllers([tabBarController], animated: true)
+        
     }
     
     deinit {
@@ -80,23 +81,20 @@ final class TabBarCoordinator: NSObject, TabBarCoordinatorProtocol {
     }
     
     //Controller coordination
-    private func getTabController(_ page: TabBarPage) -> UINavigationController {
-
+    private func getTabController(_ page: TabBarPage) -> UIViewController {
+        
         switch page {
             ///При необходимости: каждый поток панели вкладок может иметь своего собственного координатора.
         case .episodes:
             let viewController = dependencies.moduleContainer.getEpisodeCollectionViewController()
             viewController.detailsViewControllerDelegate = self
-            let navController = UINavigationController(rootViewController: viewController)
-            navController.tabBarItem = UITabBarItem(title: nil, image: page.pageImageValue(), tag: page.pageOrderNumber())
-            return navController
+            viewController.tabBarItem = UITabBarItem(title: nil, image: page.pageImageValue(), selectedImage: UIImage(named: "homeTabBar.fill"))
+            return viewController
         case .favorites:
             let favCVC = dependencies.moduleContainer.getFavoritesCollectionViewController()
             favCVC.detailsControllerDelegate = self
-            favCVC.tabBarItem = UITabBarItem(title: nil, image: page.pageImageValue(), tag: page.pageOrderNumber())
-            let navigationController = FavoritesNavigationController(rootViewController: favCVC)
-            self.favoritesNavigationController = navigationController
-            return navigationController
+            favCVC.tabBarItem = UITabBarItem(title: nil, image: page.pageImageValue(), selectedImage: UIImage(named: "tappedLike"))
+            return favCVC
         }
     }
 }
@@ -108,28 +106,21 @@ extension TabBarCoordinator: UITabBarControllerDelegate {
            let page = TabBarPage(selectIndex) {
             print("TabBArController selected page \(page)")
         }
-        
-        
     }
 }
 
 //MARK: Detail View Controller Delegate
 extension TabBarCoordinator : DetailViewControllerDelegate {
-    func didTappedOnCharacter(_ character: CharacterResponse, _ dependencies: Dependencies) {
+    func didTappedOnCharacter(_ character: CharacterResult, _ dependencies: Dependencies) {
         let detailVC = DetailsAssambley.configure(character, dependencies)
         navigationController.show(detailVC, sender: self)
     }
     
-    func didTappedOnFavoritesCharacter(_ character: CharacterResponse, _ dependencies: Dependencies) {
-        print("Navigation starts for the character \(character)")
-        guard let favoritesNavController = self.favoritesNavigationController else {
-            print(" favoritesNAVController equality nil")
-            return }
+    func didTappedOnFavoritesCharacter(_ character: CharacterResult, _ dependencies: Dependencies) {
+//        print("Navigation starts for the character \(character)")
         let detailVC = DetailsAssambley.configure(character, dependencies)
-        favoritesNavController.show(detailVC, sender: self)
+        navigationController.pushViewController(detailVC, animated: true)
     }
-    
-    
 }
 
 

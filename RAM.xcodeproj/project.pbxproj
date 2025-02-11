@@ -17,13 +17,15 @@
 		00031BD82CDA43D400048C8C /* Footer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00031BD72CDA43D200048C8C /* Footer.swift */; };
 		00031BDC2CEB3D4800048C8C /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00031BDB2CEB3D4700048C8C /* NetworkService.swift */; };
 		0021622B2C84868500BF2C62 /* NetworkServic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0021622A2C84868500BF2C62 /* NetworkServic.swift */; };
-		0021622E2C8487CE00BF2C62 /* EpisodeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0021622D2C8487CE00BF2C62 /* EpisodeResponse.swift */; };
+		0021622E2C8487CE00BF2C62 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0021622D2C8487CE00BF2C62 /* Character.swift */; };
 		002162302C8487F400BF2C62 /* InfoEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0021622F2C8487F400BF2C62 /* InfoEpisode.swift */; };
 		002162322C84889E00BF2C62 /* EpisodeMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002162312C84889E00BF2C62 /* EpisodeMock.swift */; };
-		002162342C84945500BF2C62 /* CharacterResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002162332C84945500BF2C62 /* CharacterResponse.swift */; };
+		002162342C84945500BF2C62 /* CharacterResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002162332C84945500BF2C62 /* CharacterResult.swift */; };
 		002162362C8497C100BF2C62 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002162352C8497C100BF2C62 /* NetworkError.swift */; };
 		002162382C84B37900BF2C62 /* UserDefaultService .swift in Sources */ = {isa = PBXBuildFile; fileRef = 002162372C84B37900BF2C62 /* UserDefaultService .swift */; };
 		0021623C2C85D15F00BF2C62 /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0021623B2C85D15F00BF2C62 /* TabBarCoordinator.swift */; };
+		00219E9C2D3103A400425941 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00219E9B2D3103A300425941 /* Episode.swift */; };
+		00219E9E2D36964900425941 /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00219E9D2D36963400425941 /* Untitled.swift */; };
 		002311212CF34F36000C5629 /* FavoritesAssambley.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002311202CF34F35000C5629 /* FavoritesAssambley.swift */; };
 		002311232CF34FF6000C5629 /* DetailsAssambley.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002311222CF34FF4000C5629 /* DetailsAssambley.swift */; };
 		002311252CF45669000C5629 /* TabBarAssambley.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002311242CF45668000C5629 /* TabBarAssambley.swift */; };
@@ -47,7 +49,6 @@
 		00C70EAC2C80CF34001E4746 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00C70EA62C80CF34001E4746 /* Assets.xcassets */; };
 		00C70EAE2C80CF34001E4746 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C70EA82C80CF34001E4746 /* SceneDelegate.swift */; };
 		00C70EB22C80CF3A001E4746 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C70EAF2C80CF3A001E4746 /* Dependencies.swift */; };
-		00CF4B8D2D16D63000CF0EB3 /* FavoritesNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CF4B8C2D16D62F00CF0EB3 /* FavoritesNavigationController.swift */; };
 		00D5367E2C8B59B20007F798 /* EpisodesAssambly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D5367D2C8B59B20007F798 /* EpisodesAssambly.swift */; };
 /* End PBXBuildFile section */
 
@@ -62,13 +63,15 @@
 		00031BD72CDA43D200048C8C /* Footer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Footer.swift; sourceTree = "<group>"; };
 		00031BDB2CEB3D4700048C8C /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		0021622A2C84868500BF2C62 /* NetworkServic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServic.swift; sourceTree = "<group>"; };
-		0021622D2C8487CE00BF2C62 /* EpisodeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeResponse.swift; sourceTree = "<group>"; };
+		0021622D2C8487CE00BF2C62 /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		0021622F2C8487F400BF2C62 /* InfoEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoEpisode.swift; sourceTree = "<group>"; };
 		002162312C84889E00BF2C62 /* EpisodeMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeMock.swift; sourceTree = "<group>"; };
-		002162332C84945500BF2C62 /* CharacterResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterResponse.swift; sourceTree = "<group>"; };
+		002162332C84945500BF2C62 /* CharacterResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterResult.swift; sourceTree = "<group>"; };
 		002162352C8497C100BF2C62 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		002162372C84B37900BF2C62 /* UserDefaultService .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaultService .swift"; sourceTree = "<group>"; };
 		0021623B2C85D15F00BF2C62 /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
+		00219E9B2D3103A300425941 /* Episode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
+		00219E9D2D36963400425941 /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
 		002311202CF34F35000C5629 /* FavoritesAssambley.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesAssambley.swift; sourceTree = "<group>"; };
 		002311222CF34FF4000C5629 /* DetailsAssambley.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsAssambley.swift; sourceTree = "<group>"; };
 		002311242CF45668000C5629 /* TabBarAssambley.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarAssambley.swift; sourceTree = "<group>"; };
@@ -93,7 +96,6 @@
 		00C70EA72C80CF34001E4746 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00C70EA82C80CF34001E4746 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		00C70EAF2C80CF3A001E4746 /* Dependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
-		00CF4B8C2D16D62F00CF0EB3 /* FavoritesNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesNavigationController.swift; sourceTree = "<group>"; };
 		00D5367D2C8B59B20007F798 /* EpisodesAssambly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesAssambly.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -158,9 +160,10 @@
 		0021622C2C8487B500BF2C62 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				00219E9B2D3103A300425941 /* Episode.swift */,
 				0021622F2C8487F400BF2C62 /* InfoEpisode.swift */,
-				0021622D2C8487CE00BF2C62 /* EpisodeResponse.swift */,
-				002162332C84945500BF2C62 /* CharacterResponse.swift */,
+				0021622D2C8487CE00BF2C62 /* Character.swift */,
+				002162332C84945500BF2C62 /* CharacterResult.swift */,
 				002162312C84889E00BF2C62 /* EpisodeMock.swift */,
 			);
 			path = Model;
@@ -219,7 +222,7 @@
 		008A82402CCCB78F002ED744 /* FavoritesController */ = {
 			isa = PBXGroup;
 			children = (
-				00CF4B8C2D16D62F00CF0EB3 /* FavoritesNavigationController.swift */,
+				00219E9D2D36963400425941 /* Untitled.swift */,
 				002311202CF34F35000C5629 /* FavoritesAssambley.swift */,
 				008A823D2CCCB75C002ED744 /* FavoritesViewController.swift */,
 			);
@@ -411,7 +414,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				003C34FA2CB62F090027A3C1 /* ModuleContainers.swift in Sources */,
-				0021622E2C8487CE00BF2C62 /* EpisodeResponse.swift in Sources */,
+				0021622E2C8487CE00BF2C62 /* Character.swift in Sources */,
 				008A82422CCCB84F002ED744 /* DetailsViewController.swift in Sources */,
 				002162302C8487F400BF2C62 /* InfoEpisode.swift in Sources */,
 				00031BCA2CCE107500048C8C /* TabBarPage.swift in Sources */,
@@ -421,7 +424,7 @@
 				00031BCC2CCE2D5700048C8C /* EpisodesCollectionViewController.swift in Sources */,
 				008A823E2CCCB75E002ED744 /* FavoritesViewController.swift in Sources */,
 				00031BC72CCCE61700048C8C /* LaunchCoordinator.swift in Sources */,
-				002162342C84945500BF2C62 /* CharacterResponse.swift in Sources */,
+				002162342C84945500BF2C62 /* CharacterResult.swift in Sources */,
 				003C34FC2CB645CE0027A3C1 /* LaunchAssembly.swift in Sources */,
 				00D5367E2C8B59B20007F798 /* EpisodesAssambly.swift in Sources */,
 				0021622B2C84868500BF2C62 /* NetworkServic.swift in Sources */,
@@ -436,6 +439,7 @@
 				008A82372CCBA5B4002ED744 /* AppCoordinator.swift in Sources */,
 				002162322C84889E00BF2C62 /* EpisodeMock.swift in Sources */,
 				0023112B2D05ED48000C5629 /* ImagePIckerManager.swift in Sources */,
+				00219E9E2D36964900425941 /* Untitled.swift in Sources */,
 				006DD64F2D0DD0EF000A51F5 /* DetailsInfoTableView.swift in Sources */,
 				002311272CF73202000C5629 /* Preview + SwiftUI.swift in Sources */,
 				00C70E9D2C80CF17001E4746 /* LaunchViewController.swift in Sources */,
@@ -446,7 +450,7 @@
 				00C70EAB2C80CF34001E4746 /* AppDelegate.swift in Sources */,
 				00C70E792C80CE6F001E4746 /* ViewController.swift in Sources */,
 				002311292D05EA98000C5629 /* ImageCacheManager.swift in Sources */,
-				00CF4B8D2D16D63000CF0EB3 /* FavoritesNavigationController.swift in Sources */,
+				00219E9C2D3103A400425941 /* Episode.swift in Sources */,
 				00C70EA22C80CF23001E4746 /* Constants.swift in Sources */,
 				00C70EAE2C80CF34001E4746 /* SceneDelegate.swift in Sources */,
 			);

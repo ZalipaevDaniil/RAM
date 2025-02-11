@@ -20,21 +20,22 @@ final class EpisodesCell: UICollectionViewCell {
     private let episodeNameLabel = UILabel()
     private let isFavoritesButton = UIButton(type: .system)//
     
-
-    var viewModel: EpisodesCellViewModel! {
+    var viewModel: EpisodesCellViewModel? {
         didSet {
-            
-            viewModel.imageURL = viewModel.character.image
-            viewModel.getImage { [ weak self ] in
-                guard let image = self?.viewModel.imageData else{ return }
+            viewModel?.imageURL = viewModel?.character.image
+            viewModel?.getImage { [ weak self ] in
+                guard let image = self?.viewModel?.imageData else{ return }
                 self?.characterImage.image = UIImage(data: image)
                 
             }
-            characterNameLabel.text = viewModel.nameCharacter
-            viewModel.fetchCharacter { [weak self] in
-                self?.episodeNameLabel.text = self?.viewModel.nameEpisode
+            characterNameLabel.text = viewModel?.nameCharacter
+            viewModel?.fetchCharacter { [weak self] in
+                guard let self = self else { return }
+                DispatchQueue.main.async{
+                    self.episodeNameLabel.text = self.viewModel?.nameEpisode
+                    
+                }
             }
-            
         }
     }
     
@@ -42,22 +43,18 @@ final class EpisodesCell: UICollectionViewCell {
         super.init(frame: frame)
         setupUI()
     }
-
     
-   
     //MARK: Objc Methods
     @objc func ButtonTapped() {
+        guard let isFavorite = viewModel?.isFavorite else {return}
+            viewModel?.isFavorite.toggle()
         
-        viewModel.isFavorite.toggle()
-        isFavoritesButton.setImage(
-            viewModel.isFavorite ? UIImage(named: "likeImage") : UIImage(named: "tappedLike"),
-            for: .normal
-        )
-        isFavoritesButton.tintColor = viewModel.isFavorite ? UIColor(named: "IsLikesButtonColor") : .red
-        viewModel.didChange?(viewModel)
-        
-        
-
+        let imageName = isFavorite ? "likeImage" : "tappedLike"
+        let color = isFavorite ? UIColor(named: "IsLikesButtonColor") : .red
+        isFavoritesButton.setImage(UIImage(named: imageName), for: .normal)
+        isFavoritesButton.tintColor = color
+        viewModel?.didChange?(viewModel!)
+  
         NotificationCenter.default.post(name: .favoritesDidUpdate, object: nil)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
@@ -99,9 +96,11 @@ private extension EpisodesCell {
         setupCharacterName()
         setupBottomView()
         setupMonitorImage()
-        setupEpisodeName()
         setupIsFavoritesButton()
-        setupContraints()
+        setupEpisodeName()
+        
+        
+        
     }
     
     
@@ -109,21 +108,21 @@ private extension EpisodesCell {
     func setupCharacterImage() {
         characterImage.translatesAutoresizingMaskIntoConstraints = false
         characterImage.contentMode = .scaleAspectFill
-       
+        
         characterImage.clipsToBounds = true
         contentView.addSubview(characterImage)
-        
+        characterImageConstraint()
     }
     
     func setupCharacterName() {
         characterNameLabel.translatesAutoresizingMaskIntoConstraints = false
-
+        
         characterNameLabel.font = .systemFont(ofSize: 20, weight: .medium)
         characterNameLabel.textColor = .black
         
         characterNameLabel.clipsToBounds = true
         contentView.addSubview(characterNameLabel)
-
+        characterNameConstraint()
     }
     
     func setupBottomView() {
@@ -135,7 +134,7 @@ private extension EpisodesCell {
         
         bottomView.clipsToBounds = true
         contentView.addSubview(bottomView)
-
+        bottomViewConstraint()
     }
     
     func setupMonitorImage() {
@@ -144,6 +143,7 @@ private extension EpisodesCell {
         monitorImage.image = UIImage(named: "monitorEpisodeImage")
         monitorImage.clipsToBounds = true
         bottomView.addSubview(monitorImage)
+        monitorImageConstraint()
     }
     
     func setupEpisodeName() {
@@ -154,39 +154,43 @@ private extension EpisodesCell {
         
         episodeNameLabel.clipsToBounds = true
         bottomView.addSubview(episodeNameLabel)
+        episodeNameConstraint()
         
     }
     
     func setupIsFavoritesButton() {
-        isFavoritesButton.translatesAutoresizingMaskIntoConstraints = false
-        isFavoritesButton.setImage(UIImage(named: "likeImage"), for: .normal)
-        isFavoritesButton.tintColor = UIColor(named: "IsLikesButtonColor")
+        let isFavorites = viewModel?.isFavorite ?? false
+        
+        isFavoritesButton.setImage(UIImage(named: isFavorites ? "likeImage" : "tappedLike") , for: .normal)
+        isFavoritesButton.tintColor = isFavorites ? UIColor(named: "IsLikesButtonColor") : .red
         isFavoritesButton.addTarget(self, action: #selector(ButtonTapped), for: .touchUpInside)
-      
+        isFavoritesButton.translatesAutoresizingMaskIntoConstraints = false
         bottomView.addSubview(isFavoritesButton)
-
+        IsFavoritesButton()
     }
     
     
     
     //MARK: Setup Constrints Methods
-    func setupContraints() {
-        //characterImage
+    
+    func characterImageConstraint() {
         NSLayoutConstraint.activate([
             characterImage.topAnchor.constraint(equalTo: contentView.topAnchor),
             characterImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             characterImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             characterImage.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.65)
         ])
-        
-        //characterName
+    }
+    
+    func characterNameConstraint() {
         NSLayoutConstraint.activate([
             characterNameLabel.topAnchor.constraint(equalTo: characterImage.bottomAnchor),
             characterNameLabel.leadingAnchor.constraint(equalTo: characterImage.leadingAnchor, constant: 16),
             characterNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
         ])
-        
-        //bottomView
+        print("characterName constraints applied")
+    }
+    func bottomViewConstraint() {
         NSLayoutConstraint.activate([
             bottomView.topAnchor.constraint(equalTo: characterNameLabel.bottomAnchor),
             bottomView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -194,24 +198,28 @@ private extension EpisodesCell {
             bottomView.heightAnchor.constraint(equalToConstant: 71),
             bottomView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-        
-        //monitorImage
+        print("bottomView constraints applied")
+    }
+    func monitorImageConstraint() {
         NSLayoutConstraint.activate([
             monitorImage.centerYAnchor.constraint(equalTo: bottomView.centerYAnchor),
             monitorImage.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 15),
             monitorImage.widthAnchor.constraint(equalToConstant: 33),
             monitorImage.heightAnchor.constraint(equalToConstant: 32)
-            
         ])
-        
-        //EpisodeName
+        print("monitorImage constraints applied")
+    }
+    func episodeNameConstraint() {
         NSLayoutConstraint.activate([
             episodeNameLabel.centerYAnchor.constraint(equalTo: monitorImage.centerYAnchor),
             episodeNameLabel.leadingAnchor.constraint(equalTo: monitorImage.trailingAnchor, constant: 12),
-            episodeNameLabel.trailingAnchor.constraint(lessThanOrEqualTo: isFavoritesButton.leadingAnchor, constant: -8)
+            episodeNameLabel.trailingAnchor.constraint(equalTo: isFavoritesButton.leadingAnchor, constant: -8)
         ])
-        
-        //IsFavoritesButton
+        print("EpisodeName constraints applied")
+    }
+    
+    
+    func IsFavoritesButton() {
         NSLayoutConstraint.activate([
             isFavoritesButton.centerYAnchor.constraint(equalTo: bottomView.centerYAnchor),
             isFavoritesButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -20),
@@ -219,9 +227,8 @@ private extension EpisodesCell {
             isFavoritesButton.heightAnchor.constraint(equalToConstant: 30)
             
         ])
-
+        print("IsFavoritesButton constraints applied")
     }
-    
     
 }
 

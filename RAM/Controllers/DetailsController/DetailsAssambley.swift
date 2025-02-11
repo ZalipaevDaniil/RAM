@@ -8,7 +8,7 @@
 import UIKit
 
 final class DetailsAssambley {
-    static func configure(_ character: CharacterResponse,_ dependencies: Dependencies) -> UIViewController {
+    static func configure(_ character: CharacterResult,_ dependencies: Dependencies) -> UIViewController {
         return dependencies.moduleContainer.getDetailsCollectionViewController(character)
     }
 }

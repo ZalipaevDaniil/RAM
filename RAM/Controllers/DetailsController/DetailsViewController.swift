@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import AVFoundation
+import Photos
 
 final class DetailsViewController: UIViewController {
     
@@ -26,18 +28,41 @@ final class DetailsViewController: UIViewController {
             nameLabel.text = viewModel.nameCharacter
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         setupUI()
     }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
+    
     
     //MARK: Private objc-c Methods
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func cameraButtonTapped() {
+        let alert = UIAlertController(title:"Загрузить изображение", message: nil, preferredStyle: .actionSheet)
+        
+        let cameraAction = UIAlertAction(title: "Камера", style: .default) { _ in
+            self.checkCameraPermissions()
+        }
+        
+        let galleryAction = UIAlertAction(title: "Галерея", style: .default) { _ in
+            self.checkPhotoLibraryPermissons()
+        }
+        
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+        
+        alert.addAction(cameraAction)
+        alert.addAction(galleryAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true)
     }
     
 }
@@ -53,6 +78,7 @@ private extension DetailsViewController {
     }
     
     func setupNavigationBar() {
+        ///swipe left - go back
         navigationController?.interactivePopGestureRecognizer?.delegate = self
         let backButton = UIButton(type: .system)
         backButton.setImage(UIImage(named: "goback"), for: .normal)
@@ -94,7 +120,7 @@ private extension DetailsViewController {
         cameraButton.setImage(UIImage(named: "camera"), for: .normal)
         cameraButton.tintColor = UIColor(named: "cameraColor")
         
-        //addTarget
+        cameraButton.addTarget(self, action: #selector(cameraButtonTapped), for: .touchUpInside)
         
         setupCameraButtonConstraint()
     }
@@ -155,8 +181,129 @@ private extension DetailsViewController {
 }
 
 //MARK: Gesture Recognizer Delegate
+//swipe left - go back
 extension DetailsViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         true
     }
+}
+
+//MARK: Alert Methods
+extension DetailsViewController: UIImagePickerControllerDelegate,  UINavigationControllerDelegate {
+    private func checkCameraPermissions() {
+        let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)//проверяет текущее разрешение
+        
+        switch cameraAuthorizationStatus {
+        case .notDetermined: //если разрешение еще не запрашивалось делается запрос. Если разрешилось(true) открывается камера
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                if granted {
+                    DispatchQueue.main.async{
+                        self.openCamera()
+                    }
+                }
+            }
+        case .restricted, .denied: // если доступ запрещен, открывается метод ->
+            showSettingsAlert(for: "Камера") //отображение сообщения о необходимости разрешения
+        case .authorized: // если доступ есть - открывается камера
+            openCamera()
+        @unknown default:
+            break
+        }
+    }
+    
+    private func checkPhotoLibraryPermissons() {
+        // проверяет доступ к фотогалерее
+        let photoAutorizationStatus = PHPhotoLibrary.authorizationStatus()
+        
+        switch photoAutorizationStatus {
+        case .notDetermined : // запрашивается разрешение если его нет. Если разрешение получено - открывается галерея
+            PHPhotoLibrary.requestAuthorization { status in
+                if status == .authorized {
+                    DispatchQueue.main.async {
+                        self.openPhotoLibrary()
+                    }
+                }
+            }
+        case .restricted, .denied: //если доступ запрещен открывается ->
+            showSettingsAlert(for: "Галерея")
+        case .authorized, .limited: // если доступ есть открывается галерея
+            openPhotoLibrary()
+        @unknown default:
+            break
+        }
+    }
+    
+    private func showSettingsAlert(for feature: String) {
+        //сообщает, что доступ к камере или галереи запрещен и предлагает открыть настройки
+        let alert = UIAlertController (
+            title: "\(feature) недоступна",
+            message: "Разрешите доступ в настройках.",
+            preferredStyle: .alert
+            )
+        
+        //кнопка: открыть системные настройки приложения
+        alert.addAction(UIAlertAction(title: "Открыть настройки", style: .default) { _ in
+            if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(appSettings, options: [:], completionHandler: nil)
+            }
+        })
+        //кнопка: закрыть предупреждение
+        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        
+        present(alert, animated: true)
+    }
+    
+    private func openCamera() {
+        //проверяет доступна ли камера.
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            //если камера доступна открывает ->
+            let picker = UIImagePickerController()
+            picker.delegate = self
+            picker.sourceType = .camera //Устанавливает источник как камеру(.camera)
+            picker.allowsEditing = true // возможность
+            present(picker, animated: true)
+        } else { //показывает ошибку
+            showErrorAlert(message: "Камера не доступна на этом устройстве")
+        }
+    }
+    
+    private func openPhotoLibrary() {
+        //аналогично камере открывает галерея
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            let picker = UIImagePickerController()
+            picker.delegate = self
+            picker.sourceType = .photoLibrary
+            picker.allowsEditing = true
+            present(picker, animated: true)
+        }
+    }
+    
+    private func showErrorAlert(message: String) {
+        //показывает сообщение об ошибке, если камера недоступна или другие проблемы
+        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        //кнопка ОК
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
+    //MARK: UIImagePickerControllerDelegate
+    
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        //устанавливает отредактированное
+        if let editedImage = info[.editedImage] as? UIImage {
+            characterImage.image = editedImage
+        // выбранное изображение
+        } else if let originalImage = info[.originalImage] as? UIImage {
+            characterImage.image = originalImage
+        }
+        //закрывает контроллер
+        picker.dismiss(animated: true)
+    }
+    
+    //закрывает UIImagePickerController если пользователь ничего не выбрал
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
+    }
+    
 }

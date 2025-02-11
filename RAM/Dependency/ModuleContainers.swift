@@ -29,13 +29,10 @@ extension ModuleContainer {
         let tabBar = TabBarController()
         let episodesCVC = EpisodesAssambley.configure(dependencies)
         let favoritesCVC = FavoritesAssambley.configure(dependencies)
-        
         tabBar.viewControllers = [episodesCVC, favoritesCVC]
         return tabBar
     }
 }
-
-
 
 //MARK: FetchedEpisodeVC
 extension ModuleContainer {
@@ -44,7 +41,6 @@ extension ModuleContainer {
         let viewModel = EpisodeViewModel(dependencies: dependencies)
         let episodeCVC = EpisodesCollectionViewController(collectionViewLayout: flowLayout)
         episodeCVC.viewModel = viewModel
-        
         return episodeCVC
     }
 }
@@ -63,7 +59,7 @@ extension ModuleContainer {
 
 //MARK: FetchedDetailVC
 extension ModuleContainer {
-    func getDetailsCollectionViewController(_ character: CharacterResponse) -> UIViewController {
+    func getDetailsCollectionViewController(_ character: CharacterResult) -> UIViewController {
         let dependency = Dependencies()
         let viewModel = EpisodesCellViewModel(dependency: dependency, character: character)
         let detailVC = DetailsViewController()

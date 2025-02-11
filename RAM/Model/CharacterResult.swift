@@ -1,5 +1,5 @@
 //
-//  CharacterResponse.swift
+//  CharacterResult.swift
 //  RAM
 //
 //  Created by Aaa on 01.09.2024.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CharacterResponse: Codable, Equatable {
+struct CharacterResult: Codable, Equatable {
     var id: Int
     let name: String
     let status: String
@@ -21,7 +21,7 @@ struct CharacterResponse: Codable, Equatable {
     let url: String
     let created: String
     
-    static func == (lhs: CharacterResponse, rhs: CharacterResponse) -> Bool {
+    static func == (lhs: CharacterResult, rhs: CharacterResult) -> Bool {
         return lhs.id == rhs.id
     }
 }

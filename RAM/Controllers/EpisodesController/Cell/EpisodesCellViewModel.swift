@@ -13,8 +13,8 @@ final class EpisodesCellViewModel {
         character.episode
     }
 
-    var character: CharacterResponse!
-    var episodes: [Episode] = []
+    var character: CharacterResult!
+    var episodes: [EpisodeResult] = []
     var nameCharacter:String {character.name}
     var imageData: Data?
     var nameEpisode: String  {
@@ -36,7 +36,6 @@ final class EpisodesCellViewModel {
     
     var didChange: ((EpisodesCellViewModel) -> Void)?
     
-    
     //MARK: Private Property
     private let dependency: Dependencies
     private let networkService: NetworkService
@@ -44,7 +43,7 @@ final class EpisodesCellViewModel {
     private var isLoading = false
     private let imageCacheManager: ImageCacheManager
     
-    init(dependency: Dependencies, character: CharacterResponse) {
+    init(dependency: Dependencies, character: CharacterResult) {
         self.dependency = dependency
         self.character = character
         networkService = dependency.networkService as! NetworkService
@@ -56,11 +55,11 @@ final class EpisodesCellViewModel {
     
     func fetchCharacter(completion: @escaping() -> Void) {
         for url in episodeList {
-            networkService.fetch(Episode.self, from: url) { [weak self] result in
+            networkService.fetch(EpisodeResult.self, from: url) { [weak self] result in
                 switch result {
                 case .success(let episode):
                     self?.episodes.append(episode)
-                    print("Save episode: \(String(describing: self?.episodes))")
+//                    print("Save episode: \(String(describing: self?.episodes))")
                     completion()
                 case .failure(let error):
                     print("Failed to loaded episode: \(error.localizedDescription)")
@@ -93,7 +92,7 @@ final class EpisodesCellViewModel {
         imageCacheManager.getImage(from: imageURL, witch: dependency) { [ weak self ] result in
             switch result {
             case .success(let data):
-                if imageURL == self?.imageURL {
+                if imageURL == self?.imageURL {//проверить, что URL не изменился
                     self?.imageData = Data(data)
                     completion()
                 }

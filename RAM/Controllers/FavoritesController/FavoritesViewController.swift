@@ -10,13 +10,14 @@ import Combine
 final class FavoritesCollectionViewController: UICollectionViewController {
     
     let eventPublisher = PassthroughSubject<Event, Never>()
+    var  titleLabel = UILabel()
     //MARK: Private Property
     private var baseURL = "https://rickandmortyapi.com/api/character"
     var viewModel: EpisodeViewModel! {
         didSet {
             viewModel.getAllCharacters(from: baseURL) { [ weak self] in
                 self?.viewModel.filterFavoritesCharacters()
-                print("Favorites(viewModel) in  FavCVC: \(String(describing: self?.viewModel.filterFavoritesCharacters()))")
+//                print("Favorites(viewModel) in  FavCVC: \(String(describing: self?.viewModel.filterFavoritesCharacters()))")
                 self?.collectionView.reloadData()
             }
         }
@@ -32,17 +33,17 @@ final class FavoritesCollectionViewController: UICollectionViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         viewModel.filterFavoritesCharacters()
-        
+        navigationController?.navigationBar.topItem?.title = nil
+        self.tabBarController?.navigationItem.titleView = nil
+        self.tabBarController?.navigationItem.title = "Favorites"
         collectionView.reloadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshFavorites), name: .favoritesDidUpdate, object: nil)
-        navigationItem.title = "Favourites Episode"
-        setupNavigationTitle()
+//        setupTitleLabel()
         setupCollectionView()
-        
         
         collectionView.backgroundView = UIView()
         collectionView.backgroundView?.backgroundColor = .backGround
@@ -124,15 +125,15 @@ private extension FavoritesCollectionViewController {
         collectionView.register(EpisodesCell.self, forCellWithReuseIdentifier: EpisodesCell.reuseID)
     }
     
-    func setupNavigationTitle() {
-        let titleLable = UILabel()
-        titleLable.text = "Favourites episodes"
-        titleLable.font = .systemFont(ofSize: 24, weight: .bold)
-        titleLable.textColor = .black
-        titleLable.textAlignment = .center
-        titleLable.translatesAutoresizingMaskIntoConstraints = false
-       
-        navigationItem.titleView? = titleLable
+    func setupTitleLabel() {
+        
+        titleLabel.text = "Favourites episodes"
+        titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
+        titleLabel.textColor = .black
+        titleLabel.textAlignment = .center
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        
     }
 }
 

@@ -9,8 +9,8 @@ import UIKit
 import Combine
 
 protocol DetailViewControllerDelegate: AnyObject {
-    func didTappedOnCharacter(_ character: CharacterResponse, _ dependencies: Dependencies)
-    func didTappedOnFavoritesCharacter(_ character: CharacterResponse, _ dependencies: Dependencies)
+    func didTappedOnCharacter(_ character: CharacterResult, _ dependencies: Dependencies)
+    func didTappedOnFavoritesCharacter(_ character: CharacterResult, _ dependencies: Dependencies)
 }
 
 protocol TopSectionCollectionViewControllerDelegate: AnyObject {
@@ -28,8 +28,7 @@ class EpisodesCollectionViewController: UICollectionViewController {
     let baseURL = "https://rickandmortyapi.com/api/character"
     
     //MARK: Public Propertie
-    var viewModel: EpisodeViewModel!{
-    
+    var viewModel: EpisodeViewModel?{
         didSet {
             guard let viewModel = viewModel else { return }
             viewModel.fetchCharacters(from: baseURL) { [weak self] in
@@ -60,15 +59,18 @@ class EpisodesCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("EpisodesCollectionViewController - viewDidLoad")
-        
         eventPublisher.send(.episodesComplete)
         setUpCollectionView()
+//        setupLogoImageView()
     }
 
     //Обновляет данные в коллекции перед появлением экрана.
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.topItem?.title = nil
+        self.tabBarController?.navigationItem.titleView = customImageView
         collectionView.reloadData()
+        
     }
 
     enum Event {
@@ -96,20 +98,23 @@ extension EpisodesCollectionViewController {
     }//Для секции 0 возвращается 1 элемент (фильтр). Для секции 1 — количество персонажей из viewModel.characters.count.
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        if (viewModel?.characters.isEmpty)! || indexPath.row >= (viewModel?.characters.count)! {
+//            return UICollectionViewCell()
+//        }
         print("cellForItemAt called for section: \(indexPath.section), row: \(indexPath.row)")
+
         
         switch indexPath.section {
         case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopSectionCollectionViewCell.reuseID, for: indexPath) as? TopSectionCollectionViewCell else { return UICollectionViewCell()}
-            cell.delegateTopSection = self
+            cell.delegateTopSection = self//(self - controller который реализует filterDidChoise)
             cell.viewModel = viewModel
             return cell
             
         default:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodesCell.reuseID, for: indexPath) as? EpisodesCell else{ return  UICollectionViewCell()} 
             
-            let episode = viewModel.characters[indexPath.row]
-            let cellViewModel = EpisodesCellViewModel(dependency: viewModel.dependencies, character: episode)
+            let cellViewModel = EpisodesCellViewModel(dependency: viewModel!.dependencies, character: viewModel!.characters[indexPath.row])
             
             cell.viewModel = cellViewModel
             return cell
@@ -117,11 +122,13 @@ extension EpisodesCollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         switch indexPath.section {
         case 0:
             break
         default:
-            if let character = viewModel?.characters[indexPath.row] { detailsViewControllerDelegate?.didTappedOnCharacter(character, viewModel.dependencies)}
+            
+            if let character = viewModel?.characters[indexPath.row] { detailsViewControllerDelegate?.didTappedOnCharacter(character, viewModel!.dependencies)}
         }
     }
 }
@@ -165,7 +172,7 @@ extension EpisodesCollectionViewController {
             
             footer.startIndicator()
             
-            footer.isHidden = viewModel.pageModel?.info.next == nil ? true : false
+            footer.isHidden = viewModel?.pageModel?.info?.next == nil ? true : false
             
             return footer
         default:
@@ -184,20 +191,20 @@ extension EpisodesCollectionViewController {
         let contentHeight = scrollView.contentSize.height
         let height = scrollView.frame.size.height
         
-        guard let page = viewModel.pageModel,
-              let nextPage = page.info.next,
+        guard let page = viewModel?.pageModel,
+              let nextPage = page.info?.next,
               !isShowMoreEpisode,
               offsetY >= (contentHeight - height + 90) else {return}
         
         isShowMoreEpisode = true
-        viewModel.updateCharacters(from: nextPage) {[ weak self ] newCount in
+        viewModel?.updateCharacters(from: nextPage) {[ weak self ] newCount in
             guard let self = self else { return }
-            
+            print("Characters: \(newCount)")
             self.isShowMoreEpisode = false
             
-            let totalCount = self.viewModel.characters.count //общее количество элементов после загрузки
-            let startingIndex = totalCount - newCount //индекс, с которого начинаются все элементы
-            let indexPathToAdd = Array(startingIndex..<totalCount).compactMap { IndexPath(row: $0, section: 1)
+            let totalCount = self.viewModel?.characters.count //общее количество элементов после загрузки
+            let startingIndex = totalCount! - newCount //индекс, с которого начинаются все элементы
+            let indexPathToAdd = Array(startingIndex..<totalCount!).compactMap { IndexPath(row: $0, section: 1)
             }
             
             
@@ -212,16 +219,14 @@ extension EpisodesCollectionViewController {
 
 extension EpisodesCollectionViewController: TopSectionCollectionViewControllerDelegate {
     func filterDidChose(){
-        collectionView.reloadData()
+        collectionView.reloadData()//ячейка вызывает делегат и коллекция обновляется
     }
 }
 
 //MARK: - Private methods
 private extension EpisodesCollectionViewController {
     func setUpCollectionView() {
-        setupLogoImageView()
-        
-        
+    
         collectionView.backgroundView = UIView()
         collectionView.backgroundView?.backgroundColor = UIColor(named: "backgroundColor")
         
@@ -241,8 +246,6 @@ private extension EpisodesCollectionViewController {
         logoImageView.contentMode = .scaleAspectFit
         
         customImageView.addSubview(logoImageView)
-        
-        navigationItem.titleView = customImageView
     }
     
     func getTitleLogoImageWhenScrolling(_ scrollView: UIScrollView) {

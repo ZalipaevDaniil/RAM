@@ -8,7 +8,7 @@ import UIKit
 
 final class DetailsInfoTableView: UIView {
     
-    var character: CharacterResponse!
+    var character: CharacterResult!
     private let tableView = UITableView()
     
     override init(frame: CGRect) {
